@@ -1,0 +1,6 @@
+[package]
+name = "hmac_sha1"
+version = "0.1.0"
+
+[dependencies]
+# If you rely on any other Noir libraries, list them here
