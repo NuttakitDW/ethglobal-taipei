@@ -1,0 +1,28 @@
+{
+  "name": "zkOTP Wallet",
+  "description": "Privacy-focused wallet with zkOTP verification",
+  "version": "1.0.0",
+  "icon": "https://your-domain.com/icons/icon-512x512.png",
+  "author": {
+    "name": "zkOTP Team",
+    "website": "https://zkotp-wallet.com"
+  },
+  "permissions": ["wallet_access", "camera", "biometrics"],
+  "entryPoints": {
+    "default": {
+      "url": "https://your-domain.com/app"
+    }
+  },
+  "worldcoin": {
+    "app_id": "app_staging_...",
+    "action_id": "wallet-auth"
+  },
+  "categories": ["finance", "wallet", "privacy"],
+  "keywords": ["wallet", "crypto", "privacy", "zkOTP", "zero knowledge", "OTP"],
+  "screenshots": [
+    "https://your-domain.com/screenshots/home.png",
+    "https://your-domain.com/screenshots/wallet.png",
+    "https://your-domain.com/screenshots/transfer.png"
+  ]
+}
+
