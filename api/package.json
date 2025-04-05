@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "circuit": "node circuit.js",
+    "self": "node self.js"
   },
   "keywords": [],
   "author": "",
