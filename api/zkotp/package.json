@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "circuit": "node circuit.js",
+    "start": "node index.js",
     "self": "node self.js"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
     "@noir-lang/noir_wasm": "^1.0.0-beta.2",
     "base32.js": "^0.1.0",
     "circomlibjs": "^0.1.7",
+    "cors": "^2.8.5",
     "ethers": "^5.8.0",
     "express": "^5.1.0"
   }

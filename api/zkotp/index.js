@@ -6,6 +6,9 @@ import { ethers } from "ethers";
 import base32 from "base32.js";
 import crypto from "crypto";
 import * as circomlibjs from "circomlibjs";
+import cors from "cors";
+
+// Allow CORS from Vercel frontend
 
 // -- Fix for __dirname in ESM --
 const __filename = fileURLToPath(import.meta.url);
@@ -17,6 +20,7 @@ import { Noir } from '@noir-lang/noir_js';
 import { compile, createFileManager } from "@noir-lang/noir_wasm";
 
 const app = express();
+app.use(cors()); // allows all origins
 app.use(express.json());
 
 async function compileCircuit() {
