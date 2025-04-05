@@ -1,0 +1,17 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "base32.js": "^0.1.0",
+    "circomlibjs": "^0.1.7",
+    "dotenv": "^16.4.7"
+  }
+}
