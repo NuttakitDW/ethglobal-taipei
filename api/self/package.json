@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@selfxyz/core": "^0.0.24",
-    "@selfxyz/qrcode": "^0.0.19"
-  }
-}
