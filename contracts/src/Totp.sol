@@ -125,4 +125,9 @@ contract TOTPWallet {
         require(newOwner != address(0), "Zero address not allowed");
         owner = newOwner;
     }
+
+    function updateHashedSecret(bytes32 newHashedSecret) external onlyOwner {
+        require(newHashedSecret != bytes32(0), "Empty bytes32 not allowed");
+        hashedSecret = newHashedSecret;
+    }
 }
