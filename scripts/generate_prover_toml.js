@@ -169,7 +169,6 @@ function buildProverToml({
     tx_nonce_str
 }) {
     let lines = [];
-    lines.push("[private]");
     lines.push(`secret_raw = "${secret_raw_str}"\n`);
     lines.push("secret_bits = [");
     for (const row of secret_bits_array) {
@@ -178,7 +177,6 @@ function buildProverToml({
     lines.push("]\n");
     lines.push(`otp_code = "${otp_code_val}"\n`);
 
-    lines.push("[public]");
     lines.push(`hashed_secret = "${hashed_secret_str}"`);
     lines.push(`time_step = "${time_step_val}"`);
     lines.push(`action_hash = "${action_hash_str}"`);
