@@ -1,4 +1,4 @@
-// lib.nr
+// hmac_sha1.nr
 
 type Word32 = [Field; 32];
 
@@ -342,4 +342,29 @@ pub fn from_word32(w: Word32) -> u32 {
         val |= bit_u32;
     }
     val
+}
+
+#[test]
+fn test_hmac_sha1_zero_key_time_1() {
+    // 1) Key = 64 zero bytes => [Word32; 16] of all zero
+    let key_block: [Word32; 16] = [[0; 32]; 16];
+
+    // 2) time = 1 => time_high = 0, time_low = 1
+    let time_high: Word32 = [0; 32];
+    let mut time_low: Word32 = [0; 32];
+    // Set the least significant bit in time_low
+    time_low[31] = 1;
+
+    // 3) Compute HMAC-SHA1
+    let result = hmac_sha1(key_block, time_high, time_low);
+
+    // 4) Compare each Word32 against the known reference
+    //    'from_word32' converts a Word32 -> u32
+    assert(from_word32(result[0]) == 0xeeb00b0b);
+    assert(from_word32(result[1]) == 0xcc864679);
+    assert(from_word32(result[2]) == 0xff2d8dd3);
+    assert(from_word32(result[3]) == 0x0bec495c);
+    assert(from_word32(result[4]) == 0xb5f2ee9e);
+
+    // If all asserts pass, the test is successful!
 }

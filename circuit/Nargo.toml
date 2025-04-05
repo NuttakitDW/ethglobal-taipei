@@ -1,7 +1,6 @@
 [package]
-name = "circuit"
+name = "my_project"
 type = "bin"
 authors = ["nuttakit.eth"]
 
 [dependencies]
-hmac_sha1 = { path = "./libs/hmac_sha1" }
