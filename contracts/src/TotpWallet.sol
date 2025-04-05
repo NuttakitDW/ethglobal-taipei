@@ -90,6 +90,7 @@ contract TOTPWallet {
     ) external {
         // 1. Check replay
         require(!usedNonces[txNonce], "Nonce already used");
+        // require actionHash == keckac256(abi.encodePacked("transferFunds", to, amount)), "Invalid actionHash");
 
         // 2. Check hashed secret
         require(hashedSecretFromProof == hashedSecret, "Invalid hashed secret");
@@ -116,6 +117,21 @@ contract TOTPWallet {
         //    _transferFunds(to, amount);
         // }
         // else if(actionHash == keccak256(...)) { ... }
+        
+        // transfer fund action that transfers eth from this contract to the address
+        // payable(address(uint160(actionHash))).transfer(msg.value);
+        // Or call another contract with the actionHash as a function selector
+        // Or use a delegatecall to execute the action
+        // Or whatever logic you want to implement
+        // For example, if actionHash is a function selector, you could use:
+        (bool success, ) = address(this).call(abi.encodeWithSignature("transfer(address,uint256)", to, amount));
+        require(success, "Transfer failed");
+        emit Transfer(to, amount);
+        }
+        // 6. Emit an event for the action
+        // emit ActionExecuted(actionHash, msg.sender);
+        // Note: In a real-world scenario, you would also want to handle the action
+        // execution logic here, such as transferring tokens or ETH.
     }
 
     /**
