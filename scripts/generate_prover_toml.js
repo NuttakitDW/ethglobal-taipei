@@ -34,12 +34,7 @@ async function main() {
     // 2) Reduce to BN254 prime => this is your `secret_raw` that the circuit sees
     const BN254_PRIME = BigInt("21888242871839275222246405745257275088548364400416034343698204186575808495617");
     const secret_int_mod = secret_int_orig % BN254_PRIME;
-    const secret_raw_str = secret_int_mod.toString();  // <--- store as decimal for Noir
-
-    // 3) Build `secret_bits` (512 bits) from the *original* integer 
-    //    So your HMAC can still use full 32 bytes. 
-    //    (If you want HMAC to also use the reduced version, you'd do bits of secret_int_mod, but typically TOTP uses full raw.)
-    const secret_bits_array = buildSecretBitsArray(secret_int_orig, secret_bytes.length);
+    const secret_str = secret_int_mod.toString();  // <--- store as decimal for Noir
 
     // 4) time_step = floor(UNIX_time / 30)
     const time_step_val = Math.floor(Date.now() / 1000 / 30);
@@ -49,6 +44,7 @@ async function main() {
 
     // 6) Poseidon BN254 hash of the reduced `secret_raw`
     const hashed_secret_str = await computePoseidonHash(secret_int_mod);
+    const hashed_otp_str = await computePoseidonHash([otp_code_val]);
 
     // placeholders
     const action_hash_str = "0";
@@ -56,12 +52,12 @@ async function main() {
 
     // 7) Write Prover.toml
     const proverToml = buildProverToml({
-        secret_raw_str,
-        secret_bits_array,
-        otp_code_val,
-        hashed_secret_str,
-        time_step_val,
         action_hash_str,
+        hashed_otp_str,
+        hashed_secret_str,
+        otp_code_val,
+        secret_str,
+        time_step_val,
         tx_nonce_str
     });
 
@@ -69,7 +65,6 @@ async function main() {
     console.log("Prover.toml generated successfully!");
     console.log("otp_code =", otp_code_val);
     console.log("hashed_secret =", hashed_secret_str);
-    console.log("secret_raw (mod prime) =", secret_raw_str);
 }
 
 main().catch(err => {
@@ -160,26 +155,21 @@ async function computePoseidonHash(xField) {
  * Construct Prover.toml
  */
 function buildProverToml({
-    secret_raw_str,
-    secret_bits_array,
-    otp_code_val,
-    hashed_secret_str,
-    time_step_val,
     action_hash_str,
+    hashed_otp_str,
+    hashed_secret_str,
+    otp_code_val,
+    secret_str,
+    time_step_val,
     tx_nonce_str
 }) {
     let lines = [];
-    lines.push(`secret_raw = "${secret_raw_str}"\n`);
-    lines.push("secret_bits = [");
-    for (const row of secret_bits_array) {
-        lines.push(`  [${row.join(", ")}],`);
-    }
-    lines.push("]\n");
-    lines.push(`otp_code = "${otp_code_val}"\n`);
-
-    lines.push(`hashed_secret = "${hashed_secret_str}"`);
-    lines.push(`time_step = "${time_step_val}"`);
     lines.push(`action_hash = "${action_hash_str}"`);
+    lines.push(`hashed_otp = "${hashed_otp_str}"`);
+    lines.push(`hashed_secret = "${hashed_secret_str}"`);
+    lines.push(`otp_code = "${otp_code_val}"\n`);
+    lines.push(`secret = "${secret_str}"\n`);
+    lines.push(`time_step = "${time_step_val}"`);
     lines.push(`tx_nonce = "${tx_nonce_str}"\n`);
 
     return lines.join("\n");
