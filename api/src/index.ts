@@ -1,12 +1,30 @@
-import express from "express";
+import { serve } from "bun";
+import { prove } from "./proof";  // We'll implement `prove` below
 
-const app = express();
-app.use(express.json());
+serve({
+    port: 3000,
+    fetch(req) {
+        const url = new URL(req.url);
+        if (url.pathname === "/prove" && req.method === "POST") {
+            return handleProveRequest(req);
+        }
+        return new Response("Not Found", { status: 404 });
+    },
+});
 
-// ✅ Correct (with path string)
-app.post('/generate-proof', (req, res) => {
-    res.send('Hello world');
-});
-app.listen(3000, () => {
-    console.log("Proof Generator listening on port 3000");
-});
+async function handleProveRequest(req: Request) {
+    try {
+        const { x, y, z } = await req.json();
+        // Generate proof using the Noir WASM
+        const proofData = await prove(x, y, z);
+
+        // Return proof as JSON
+        return new Response(JSON.stringify({ proof: proofData }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (err) {
+        console.error(err);
+        return new Response(JSON.stringify({ error: (err instanceof Error ? err.message : String(err)) }), { status: 500 });
+    }
+}

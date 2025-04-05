@@ -1,0 +1,6 @@
+[package]
+name = "zkotp"
+type = "bin"
+authors = ["nuttakit.eth"]
+
+[dependencies]
