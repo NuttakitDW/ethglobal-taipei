@@ -7,11 +7,11 @@ fn main(
     secret: Field, // 32-byte TOTP secret (for Poseidon check)
     otp_code: Field, // 6-digit code
     // Public
-    hashed_secret: Field,
-    hashed_otp: Field,
-    time_step: Field,
-    action_hash: Field,
-    tx_nonce: Field,
+    hashed_secret: pub Field,
+    hashed_otp: pub Field,
+    time_step: pub Field,
+    action_hash: pub Field,
+    tx_nonce: pub Field,
 ) {
     let computed_hashed_secret = poseidon::bn254::hash_1([secret]);
     assert(computed_hashed_secret == hashed_secret);
