@@ -29,7 +29,7 @@ export function SelfProtocolQR({
   userId,
   appName = "zkOTP Wallet",
   scope = "zkotp-wallet-auth",
-  endpoint = "https://zkotp-wallet.com/api/verify",
+  endpoint = "https://16fd-111-235-226-130.ngrok-free.app",
 }: SelfProtocolQRProps) {
   const [internalUserId] = useState<string>(userId || `user-${Date.now()}`)
   const [isBrowser, setIsBrowser] = useState(false)

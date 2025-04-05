@@ -24,8 +24,8 @@ app.post('/verify', async (req, res) => {
         // NOTE: 'my-application-scope' must match the scope in your front-end's SelfAppBuilder
         // and the second argument is the endpoint for your deployed server (not localhost in production).
         const selfBackendVerifier = new SelfBackendVerifier(
-            'my-application-scope',
-            'https://myapp.com/api/verify'
+            'zkotp-wallet-auth',
+            'https://16fd-111-235-226-130.ngrok-free.app'
         );
 
         // Verify the proof from the front-end
@@ -56,7 +56,7 @@ app.post('/verify', async (req, res) => {
 });
 
 // Start listening
-const PORT = 3000;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Self verification server running on http://localhost:${PORT}`);
 });
