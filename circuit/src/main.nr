@@ -15,7 +15,7 @@ fn main(
     otp_code: Field, // 6-digit code
     // Public
     hashed_secret: Field,
-    time_step: Field,
+    time_step: u64,
     action_hash: Field,
     tx_nonce: Field,
 ) {
@@ -54,7 +54,7 @@ fn main(
 
 /// Converts a 64-bit integer (in `time_step`) into two 32-bit Word32 values
 /// in **big-endian** order: (time_high, time_low)
-fn to_big_endian_64_words(time_step: Field) -> (Word32, Word32) {
+fn to_big_endian_64_words(time_step: u64) -> (Word32, Word32) {
     let be_bits_64 = to_big_endian_64(time_step);
 
     // Split them: high 32 bits and low 32 bits (both big-endian).
@@ -71,15 +71,17 @@ fn to_big_endian_64_words(time_step: Field) -> (Word32, Word32) {
 }
 
 /// Converts a Field (< 2^64) into an array of 64 bits (big-endian).
-fn to_big_endian_64(x: Field) -> [Field; 64] {
-    let le_bits = x.to_le_bits(); // le_bits[0] = LSB, le_bits[63] = MSB
-    let mut be_bits = [0.into(); 64];
+fn to_big_endian_64(x: u64) -> [Field; 64] {
+    // 1) Decompose into 64 bits in little-endian order
+    let bits_le: [bool; 64] = u64_to_le_bits(x);
 
-    // Reverse them to make index 0 the MSB
+    // 2) Reverse them for big-endian
+    let mut bits_be = [0.into(); 64];
     for i in 0..64 {
-        be_bits[i] = Field::from(le_bits[63 - i] as u8);
+        let bit_bool = bits_le[63 - i]; // MSB goes at index 0
+        bits_be[i] = if bit_bool { 1.into() } else { 0.into() };
     }
-    be_bits
+    bits_be
 }
 
 /// Flatten [Word32; 5] => [Field; 160] bit array
@@ -172,4 +174,17 @@ fn constrain_bit(f: Field) -> u32 {
     } else {
         0
     }
+}
+
+/// Manually convert a u64 into 64 little-endian bits.
+/// - bit 0 in the returned array is the LSB
+/// - bit 63 is the MSB
+fn u64_to_le_bits(x: u64) -> [bool; 64] {
+    let mut bits = [false; 64];
+    let mut tmp = x;
+    for i in 0..64 {
+        bits[i] = (tmp & 1) == 1;
+        tmp = tmp >> 1;
+    }
+    bits
 }
