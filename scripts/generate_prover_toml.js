@@ -14,12 +14,13 @@ const fs = require("fs");
 const base32 = require("base32.js");  // from 'base32.js'
 const crypto = require("crypto");
 const circomlibjs = require("circomlibjs");
+require('dotenv').config();
 
 async function main() {
     // ---------------------------
     // 1) Base32 decode
     // ---------------------------
-    const b32_secret = "OR5HU4BSIVFSKYZKLJCEQJJXMMQUSSJBIBXVE4ZYERYUI5KVI5TA";
+    const b32_secret = process.env.SECRET;
 
     const b32_secret_padded = padBase32(b32_secret);
     // decode with base32.js
