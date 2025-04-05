@@ -1,20 +1,24 @@
 // main.nr
 
-// Example import for your HMAC-SHA1 logic (if defined in hmac_sha1.nr)
-mod hmac_sha1;
-
-// Type alias if needed (depends on your existing code)
+// If your HMAC code uses Word32 = [Field; 32]
 type Word32 = [Field; 32];
+
+// e.g., if you have hmac_sha1(...) expecting [Word32; 16] for the key block
+mod hmac_sha1;
 
 fn main(
     // Private
-    secret: [[Field; 32]; 16], // 512-bit TOTP secret (bitwise)
-    otp_code: Field, // 6-digit TOTP code
+    secret_raw: [u8; 32], // 32-byte TOTP secret (for Poseidon check)
+    secret_bits: [[Field; 32]; 16], // 512-bit bitwise secret (for HMAC)
+    otp_code: Field, // 6-digit code
     // Public
     hashed_secret: Field,
     time_step: Field,
     action_hash: Field,
     tx_nonce: Field,
 ) {
-    // We'll fill in the circuit logic (Poseidon check, TOTP HMAC, etc.) in subsequent steps.
+    // 1) Poseidon check: poseidon(secret_raw) == hashed_secret
+    // 2) TOTP logic: hmac_sha1(secret_bits, time_step_bits) ...
+    // 3) Compare result to otp_code
+    // 4) Include action_hash & tx_nonce in the proof
 }
